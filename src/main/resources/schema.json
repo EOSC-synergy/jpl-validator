@@ -173,6 +173,13 @@
             "required": ["repos"],
             "additionalProperties": false
         },
+        "sqa_criterion": {
+            "type": "object",
+            "oneOf": [
+                { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                { "$ref": "#/definitions/repo_settings" }
+            ]
+        },
         "environment": {
             "description": "Sets the environment variables required for the runtime context",
             "type": "object",
