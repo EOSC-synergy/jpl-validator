@@ -158,20 +158,27 @@
                 "tox": ["container"]
             }
         },
-        "sqa_criterion_repo": {
+        "sqa_criterion_reponame": {
             "type": "object",
             "minProperties": 1,
             "patternProperties": {
                 "[a-z0-9_-]*": { "$ref": "#/definitions/repo_settings" }
             }
         },
-        "sqa_criterion": {
+        "sqa_criterion_with_repos": {
             "type": "object",
             "properties": {
-                "repos": { "$ref": "#/definitions/sqa_criterion_repo" }
+                "repos": { "$ref": "#/definitions/sqa_criterion_reponame" }
             },
             "required": ["repos"],
             "additionalProperties": false
+        },
+        "sqa_criterion": {
+            "type": "object",
+            "oneOf": [
+                { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                { "$ref": "#/definitions/repo_settings" }
+            ]
         },
         "environment": {
             "description": "Sets the environment variables required for the runtime context",
