@@ -173,6 +173,41 @@
             "required": ["repos"],
             "additionalProperties": false
         },
+        "sqa_criterion_repos_implies_config_repos": {
+            "anyOf": [
+                {
+                    "not": {
+                        "type": "object",
+                        "properties": {
+                            "sqa_criteria": {
+                                "type": "object",
+                                "minProperties": 1,
+                                "properties": {
+                                    "QC.Acc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Lic": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Sty": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Uni": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Fun": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Sec": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Doc": { "$ref": "#/definitions/sqa_criterion_with_repos" }
+                                },
+                                "additionalProperties": false
+                            }
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "config": {
+                            "type": "object",
+                            "required": ["project_repos"]
+                        }
+                    },
+                    "required": ["config"]
+                }
+            ]
+        },
         "sqa_criterion": {
             "type": "object",
             "oneOf": [
@@ -240,5 +275,8 @@
     "required": [
         "sqa_criteria"
     ],
-    "additionalProperties": false
+    "additionalProperties": false,
+    "allOf": [
+        { "$ref": "#/definitions/sqa_criterion_repos_implies_config_repos" }
+    ]
 }
