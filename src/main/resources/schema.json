@@ -61,26 +61,6 @@
             "required": ["type", "id"],
             "additionalProperties": false
         },
-        "credentials_file": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": ["file", "zip"],
-                    "description": "Fixed ID for the <file> & <zip> credential type (see Jenkins' Credentials Binding Plugin)"
-                },
-                "id": {
-                    "type": "string",
-                    "description": "Identifier used in Jenkins endpoint for the current credentials"
-                },
-                "variable": {
-                    "type": "string",
-                    "description": "Sets a variable to the file given in the credentials (see Jenkins' Credentials Binding Plugin)"
-                }
-            },
-            "required": ["type", "id"],
-            "additionalProperties": false
-        },
         "credentials_certificate": {
             "type": "object",
             "properties": {
@@ -233,11 +213,13 @@
             "type": "object",
             "minProperties": 1,
             "properties": {
-                "qc_style": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_coverage": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_functional": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_security": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_doc": { "$ref": "#/definitions/sqa_criterion" }
+                "QC.Acc": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Lic": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Sty": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Uni": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Fun": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Sec": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Doc": { "$ref": "#/definitions/sqa_criterion" }
             },
             "additionalProperties": false
         },
