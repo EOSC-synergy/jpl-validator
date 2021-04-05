@@ -148,7 +148,7 @@
                 "commands": { "type": "array" },
                 "tox": { "$ref": "#/definitions/tox" }
             },
-            "oneOf": [
+            "anyOf": [
                 { "required": ["commands"] },
                 { "required": ["tox"] }
             ],
