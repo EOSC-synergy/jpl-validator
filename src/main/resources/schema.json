@@ -22,7 +22,7 @@
                 "testenv": { "type": "array" },
                 "tox_file": { "type": "string" }
             },
-            "required": ["testenv"],
+            "required": ["testenv", "tox_file"],
             "additionalProperties": false
         },
         "credentials_string": {
@@ -148,7 +148,7 @@
                 "commands": { "type": "array" },
                 "tox": { "$ref": "#/definitions/tox" }
             },
-            "oneOf": [
+            "anyOf": [
                 { "required": ["commands"] },
                 { "required": ["tox"] }
             ],
