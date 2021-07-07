@@ -158,20 +158,63 @@
                 "tox": ["container"]
             }
         },
-        "sqa_criterion_repo": {
+        "sqa_criterion_reponame": {
             "type": "object",
             "minProperties": 1,
             "patternProperties": {
                 "[a-z0-9_-]*": { "$ref": "#/definitions/repo_settings" }
             }
         },
-        "sqa_criterion": {
+        "sqa_criterion_with_repos": {
             "type": "object",
             "properties": {
-                "repos": { "$ref": "#/definitions/sqa_criterion_repo" }
+                "repos": { "$ref": "#/definitions/sqa_criterion_reponame" }
             },
             "required": ["repos"],
             "additionalProperties": false
+        },
+        "sqa_criterion_repos_implies_config_repos": {
+            "anyOf": [
+                {
+                    "not": {
+                        "type": "object",
+                        "properties": {
+                            "sqa_criteria": {
+                                "type": "object",
+                                "minProperties": 1,
+                                "properties": {
+                                    "QC.Acc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Lic": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Sty": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Uni": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Fun": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Sec": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Doc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.FAIR": { "$ref": "#/definitions/sqa_criterion_with_repos" }
+                                },
+                                "additionalProperties": false
+                            }
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "config": {
+                            "type": "object",
+                            "required": ["project_repos"]
+                        }
+                    },
+                    "required": ["config"]
+                }
+            ]
+        },
+        "sqa_criterion": {
+            "type": "object",
+            "oneOf": [
+                { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                { "$ref": "#/definitions/repo_settings" }
+            ]
         },
         "environment": {
             "description": "Sets the environment variables required for the runtime context",
@@ -213,11 +256,13 @@
             "type": "object",
             "minProperties": 1,
             "properties": {
-                "qc_style": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_coverage": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_functional": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_security": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_doc": { "$ref": "#/definitions/sqa_criterion" }
+                "QC.Acc": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Lic": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Sty": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Uni": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Fun": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Sec": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Doc": { "$ref": "#/definitions/sqa_criterion" }
             },
             "additionalProperties": false
         },
@@ -231,5 +276,8 @@
     "required": [
         "sqa_criteria"
     ],
-    "additionalProperties": false
+    "additionalProperties": false,
+    "allOf": [
+        { "$ref": "#/definitions/sqa_criterion_repos_implies_config_repos" }
+    ]
 }
