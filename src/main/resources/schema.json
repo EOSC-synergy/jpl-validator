@@ -189,7 +189,8 @@
                                     "QC.Uni": { "$ref": "#/definitions/sqa_criterion_with_repos" },
                                     "QC.Fun": { "$ref": "#/definitions/sqa_criterion_with_repos" },
                                     "QC.Sec": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Doc": { "$ref": "#/definitions/sqa_criterion_with_repos" }
+                                    "QC.Doc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.FAIR": { "$ref": "#/definitions/sqa_criterion_with_repos" }
                                 },
                                 "additionalProperties": false
                             }
