@@ -262,7 +262,8 @@
                 "QC.Uni": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.Fun": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.Sec": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Doc": { "$ref": "#/definitions/sqa_criterion" }
+                "QC.Doc": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.FAIR": { "$ref": "#/definitions/sqa_criterion" }
             },
             "additionalProperties": false
         },
