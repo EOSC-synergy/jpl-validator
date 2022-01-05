@@ -182,15 +182,10 @@
                             "sqa_criteria": {
                                 "type": "object",
                                 "minProperties": 1,
-                                "properties": {
-                                    "QC.Acc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Lic": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Sty": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Uni": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Fun": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Sec": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Doc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.FAIR": { "$ref": "#/definitions/sqa_criterion_with_repos" }
+                                "patternProperties": {
+                                    "QC\\.(Acc|Doc|FAIR|Fun|Lic|Sec|Sty|Uni)(0[1-9]|1[0-9]){0,1}$": {
+                                        "$ref": "#/definitions/sqa_criterion_with_repos"
+                                    }
                                 },
                                 "additionalProperties": false
                             }
@@ -255,15 +250,10 @@
             "description": "Contains all the required SQA baseline's criteria definitions",
             "type": "object",
             "minProperties": 1,
-            "properties": {
-                "QC.Acc": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Lic": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Sty": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Uni": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Fun": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Sec": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Doc": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.FAIR": { "$ref": "#/definitions/sqa_criterion" }
+            "patternProperties": {
+                "QC\\.(Acc|Doc|FAIR|Fun|Lic|Sec|Sty|Uni)(0[1-9]|1[0-9]){0,1}$": {
+                    "$ref": "#/definitions/sqa_criterion"
+                }
             },
             "additionalProperties": false
         },
