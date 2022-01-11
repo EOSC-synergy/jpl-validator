@@ -185,6 +185,7 @@
                                 "properties": {
                                     "QC.Acc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
                                     "QC.Lic": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Met": { "$ref": "#/definitions/sqa_criterion_with_repos" },
                                     "QC.Sty": { "$ref": "#/definitions/sqa_criterion_with_repos" },
                                     "QC.Uni": { "$ref": "#/definitions/sqa_criterion_with_repos" },
                                     "QC.Fun": { "$ref": "#/definitions/sqa_criterion_with_repos" },
@@ -258,6 +259,7 @@
             "properties": {
                 "QC.Acc": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.Lic": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Met": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.Sty": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.Uni": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.Fun": { "$ref": "#/definitions/sqa_criterion" },
