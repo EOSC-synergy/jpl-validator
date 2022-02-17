@@ -16,6 +16,77 @@
                 "[a-z0-9_]*": { "$ref": "#/definitions/config_repo_settings" }
             }
         },
+        "deployments_settings_tools": {
+            "type": "object",
+            "properties": {
+                "apply": { "$ref": "#/definitions/deployments_settings_tools_apply" },
+                "kustomize": { "$ref": "#/definitions/deployments_settings_tools_kustomize" },
+                "helm": { "$ref": "#/definitions/deployments_settings_tools_helm" },
+                "kpt": { "$ref": "#/definitions/deployments_settings_tools_kpt" }
+            },
+            "oneOf": [
+                { "required": ["apply"] },
+                { "required": ["kustomize"] },
+                { "required": ["helm"] },
+                { "required": ["kpt"] }
+            ],
+            "additionalProperties": false
+        },
+        "deployments_settings_run": {
+            "type": "object",
+            "properties": {
+                "pre": { "$ref": "#/definitions/deployments_settings_run" },
+                "post": { "$ref": "#/definitions/deployments_settings_run" }
+            },
+            "anyOf": [
+                { "required": ["pre"] },
+                { "required": ["post"] }
+            ],
+            "additionalProperties": false
+        },
+        "deployments_settings": {
+            "type": "object",
+            "properties": {
+                "composer": {
+                    "type": "string",
+                    "enum": ["docker_compose", "kubernetes"]
+                },
+                "tools": { "$ref": "#/definitions/deployments_settings_tools" },
+                "run": { "$ref": "#/definitions/deployments_settings_run" }
+            },
+            "anyOf": [{
+                    "properties": { "composer": { "const": "kubernetes" } },
+                    "required": ["composer", "tools"]
+                },
+                {
+                    "properties": { "composer": { "const": "docker-compose" } },
+                    "required": ["composer"]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "deployments": {
+            "type": "object",
+            "patternProperties": {
+                "[a-z0-9_]*": { "$ref": "#/definitions/deployments_settings" }
+            },
+            "additionalProperties": false
+        },
+        "container_groups_settings": {
+            "type": "object",
+            "properties": {
+                "services": { "type": "array" },
+                "options": { "$ref": "#/definitions/container_groups_settings_options" }
+            },
+            "additionalProperties": false
+        },
+        "container_groups": {
+            "type": "object",
+            "patternProperties": {
+                "[a-z0-9_]*": { "$ref": "#/definitions/container_groups_settings" }
+            },
+            "additionalProperties": false
+        },
         "tox": {
             "type": "object",
             "properties": {
@@ -23,6 +94,15 @@
                 "tox_file": { "type": "string" }
             },
             "required": ["testenv", "tox_file"],
+            "additionalProperties": false
+        },
+        "maven": {
+            "type": "object",
+            "properties": {
+                "maven_file": { "type": "string" },
+                "options": { "type": "string" },
+                "goals": { "type": "string" }
+            },
             "additionalProperties": false
         },
         "credentials_string": {
@@ -146,11 +226,13 @@
             "properties": {
                 "container": { "type": "string" },
                 "commands": { "type": "array" },
-                "tox": { "$ref": "#/definitions/tox" }
+                "tox": { "$ref": "#/definitions/tox" },
+                "maven": { "$ref": "#/definitions/maven" }
             },
             "anyOf": [
                 { "required": ["commands"] },
-                { "required": ["tox"] }
+                { "required": ["tox"] },
+                { "required": ["maven"] }
             ],
             "additionalProperties": false,
             "dependencies": {
@@ -174,8 +256,7 @@
             "additionalProperties": false
         },
         "sqa_criterion_repos_implies_config_repos": {
-            "anyOf": [
-                {
+            "anyOf": [{
                     "not": {
                         "type": "object",
                         "properties": {
@@ -231,7 +312,7 @@
             "properties": {
                 "node_agent": {
                     "type": "string",
-                    "enum": ["docker_compose"]
+                    "enum": ["docker_compose", "kubernetes"]
                 },
                 "deploy_template": { "type": "string" },
                 "project_repos": { "$ref": "#/definitions/config_repo" },
@@ -246,9 +327,12 @@
                             { "$ref": "#/definitions/credentials_ssh_user_private_key" }
                         ]
                     }
-                }
+                },
+                "deployments": { "$ref": "#/definitions/deployments" },
+                "container_groups": { "$ref": "#/definitions/container_groups" }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "required": ["project_repos"]
         },
         "sqa_criteria": {
             "description": "Contains all the required SQA baseline's criteria definitions",
@@ -279,4 +363,10 @@
     "allOf": [
         { "$ref": "#/definitions/sqa_criterion_repos_implies_config_repos" }
     ]
+}]
+}]
+}]
+}]
+}]
+}]
 }
