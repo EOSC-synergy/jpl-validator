@@ -32,6 +32,15 @@
             "required": ["testenv"],
             "additionalProperties": false
         },
+        "maven": {
+            "type": "object",
+            "properties": {
+                "maven_file": { "type": "string" },
+                "options": { "type": "string" },
+                "goals": { "type": "string" }
+            },
+            "additionalProperties": false
+        },
         "credentials_string": {
             "type": "object",
             "properties": {
@@ -137,11 +146,13 @@
             "properties": {
                 "container": { "type": "string" },
                 "commands": { "type": "array" },
-                "tox": { "$ref": "#/definitions/tox" }
+                "tox": { "$ref": "#/definitions/tox" },
+                "maven": { "$ref": "#/definitions/maven" }
             },
             "oneOf": [
                 { "required": ["commands"] },
-                { "required": ["tox"] }
+                { "required": ["tox"] },
+                { "required": ["maven"] }
             ],
             "additionalProperties": false,
             "dependencies": {
@@ -184,7 +195,7 @@
                 },
                 "deploy_template": { "type": "string" },
                 "project_repos": { "$ref": "#/definitions/config_repo" },
-                "credentials": { 
+                "credentials": {
                     "type": "array",
                     "items": {
                         "anyOf": [
