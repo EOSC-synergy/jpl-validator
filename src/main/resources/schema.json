@@ -363,10 +363,4 @@
     "allOf": [
         { "$ref": "#/definitions/sqa_criterion_repos_implies_config_repos" }
     ]
-}]
-}]
-}]
-}]
-}]
-}]
 }
