@@ -1,5 +1,5 @@
 sqa_criteria:
-  qc_style:
+  QC.Sty:
     repos:
       jpl-validator:
         container: ajv

@@ -4,7 +4,7 @@ config:
         id: orviz-dockerhub
 
 sqa_criteria:
-  qc_doc:
+  QC.Doc:
     repos:
       jpl-validator:
         container: gradle
