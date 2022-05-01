@@ -29,7 +29,8 @@
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Sets a variable to the text given in the credentials (see Jenkins' Credentials Binding Plugin)"
                 },
                 "id": {
                     "type": "string",
@@ -47,7 +48,9 @@
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "const": "file",
+                    "description": "Copies the file given in the credentials to a temporary location, then sets the variable to that location. (The file is deleted when the build completes.)"
                 },
                 "id": {
                     "type": "string",
