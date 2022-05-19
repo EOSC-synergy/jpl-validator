@@ -29,7 +29,8 @@
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Sets a variable to the text given in the credentials (see Jenkins' Credentials Binding Plugin)"
                 },
                 "id": {
                     "type": "string",
@@ -47,7 +48,9 @@
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "const": "file",
+                    "description": "Copies the file given in the credentials to a temporary location, then sets the variable to that location. (The file is deleted when the build completes.)"
                 },
                 "id": {
                     "type": "string",
@@ -173,41 +176,27 @@
             "required": ["repos"],
             "additionalProperties": false
         },
-        "sqa_criterion_repos_implies_config_repos": {
-            "anyOf": [
-                {
-                    "not": {
-                        "type": "object",
-                        "properties": {
-                            "sqa_criteria": {
-                                "type": "object",
-                                "minProperties": 1,
-                                "properties": {
-                                    "QC.Acc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Lic": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Sty": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Uni": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Fun": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Sec": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.Doc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
-                                    "QC.FAIR": { "$ref": "#/definitions/sqa_criterion_with_repos" }
-                                },
-                                "additionalProperties": false
-                            }
-                        }
-                    }
-                },
-                {
-                    "type": "object",
-                    "properties": {
-                        "config": {
-                            "type": "object",
-                            "required": ["project_repos"]
-                        }
-                    },
-                    "required": ["config"]
-                }
-            ]
+        "sqa_criteria": {
+            "description": "Contains all the required SQA baseline's criteria definitions",
+            "type": "object",
+            "minProperties": 1,
+            "properties": {
+                "QC.Acc": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Lic": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Sty": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Uni": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Fun": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Sec": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Doc": { "$ref": "#/definitions/sqa_criterion" },
+                "SvcQC.Dep": { "$ref": "#/definitions/sqa_criterion" },
+                "SvcQC.Doc": { "$ref": "#/definitions/sqa_criterion" },
+                "SvcQC.Fun": { "$ref": "#/definitions/sqa_criterion" },
+                "SvcQC.Sec": { "$ref": "#/definitions/sqa_criterion" },
+                "SvcQC.Api": { "$ref": "#/definitions/sqa_criterion" },
+                "SvcQC.Int": { "$ref": "#/definitions/sqa_criterion" },
+                "SvcQC.Per": { "$ref": "#/definitions/sqa_criterion" }
+            },
+            "additionalProperties": false
         },
         "sqa_criterion": {
             "type": "object",
@@ -219,8 +208,10 @@
         "environment": {
             "description": "Sets the environment variables required for the runtime context",
             "type": "object",
-            "propertyNames": {
-                "pattern": "^[A-Z]{1}[A-Z0-9_]*"
+            "patternProperties": {
+                "^[A-Z]{1}[A-Z0-9_]*": {
+                    "type": "string"
+                }
             }
         }
     },
@@ -252,20 +243,7 @@
             "additionalProperties": false
         },
         "sqa_criteria": {
-            "description": "Contains all the required SQA baseline's criteria definitions",
-            "type": "object",
-            "minProperties": 1,
-            "properties": {
-                "QC.Acc": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Lic": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Sty": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Uni": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Fun": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Sec": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.Doc": { "$ref": "#/definitions/sqa_criterion" },
-                "QC.FAIR": { "$ref": "#/definitions/sqa_criterion" }
-            },
-            "additionalProperties": false
+            "$ref": "#/definitions/sqa_criteria"
         },
         "environment": { "$ref": "#/definitions/environment" },
         "timeout": {
@@ -277,8 +255,5 @@
     "required": [
         "sqa_criteria"
     ],
-    "additionalProperties": false,
-    "allOf": [
-        { "$ref": "#/definitions/sqa_criterion_repos_implies_config_repos" }
-    ]
+    "additionalProperties": false
 }
