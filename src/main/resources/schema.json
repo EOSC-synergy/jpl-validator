@@ -188,6 +188,7 @@
                 "QC.Fun": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.Sec": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.Doc": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Met": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.Ver": { "$ref": "#/definitions/sqa_criterion" },
                 "QC.FAIR": { "$ref": "#/definitions/sqa_criterion" },
                 "SvcQC.Dep": { "$ref": "#/definitions/sqa_criterion" },
