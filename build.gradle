@@ -46,7 +46,7 @@ else {
     if (version == 'master') {
         jib.to.image = "${project.ext.organization}/${project.name}:latest"
     }
-    else if (details.isCleanTag) {
+    else if (details.lastTag) {
         jib.to.image = "${project.ext.organization}/${project.name}:${details.lastTag}"
     }
     else {
