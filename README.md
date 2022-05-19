@@ -22,7 +22,17 @@ $ java -jar ./build/libs/jpl-validator-2.0.0.jar .sqa/config.yml
 
 #### Through Docker (via Google's Jib)
 
+##### Just build the Docker image
+
 ```
 $ ./gradlew jibDockerBuild
+$ docker run --rm -v $PWD:/jpl eoscsynergy/jpl-validator:2.0.0 /jpl/.sqa/config.yml
+```
+
+##### Build & push Docker image
+
+```
+# Set first JPL_USERNAME and JPL_PASSWORD variables pointing to the Docker registry's username and password
+$ ./gradlew jib
 $ docker run --rm -v $PWD:/jpl eoscsynergy/jpl-validator:2.0.0 /jpl/.sqa/config.yml
 ```
