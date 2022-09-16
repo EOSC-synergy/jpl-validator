@@ -6,21 +6,14 @@
             "properties": {
                 "repo": { "type": "string", "format": "uri" },
                 "branch": { "type": "string" },
-                "dockerhub": { "type": "string" },
-                "dockertag": {
-                    "anyOf": [
-                        { "type": "string" },
-                        { "type": "array" }
-                    ]
-                }
+                "credentials_id": { "type": "string" }
             },
             "required": ["repo"]
         },
         "config_repo": {
             "type": "object",
-            "minProperties": 1,
             "patternProperties": {
-                "[a-z0-9_-]*": { "$ref": "#/definitions/config_repo_settings" }
+                "[a-z0-9_]*": { "$ref": "#/definitions/config_repo_settings" }
             }
         },
         "tox": {
@@ -29,7 +22,7 @@
                 "testenv": { "type": "array" },
                 "tox_file": { "type": "string" }
             },
-            "required": ["testenv"],
+            "required": ["testenv", "tox_file"],
             "additionalProperties": false
         },
         "maven": {
@@ -45,9 +38,7 @@
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string",
-                    "enum": ["string", "file", "zip"],
-                    "description": "Fixed ID for the <string>, <file> & <zip> credential type (see Jenkins' Credentials Binding Plugin)"
+                    "type": "string"
                 },
                 "id": {
                     "type": "string",
@@ -59,6 +50,24 @@
                 }
             },
             "required": ["id"],
+            "additionalProperties": false
+        },
+        "credentials_file": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "Identifier used in Jenkins endpoint for the current credentials"
+                },
+                "variable": {
+                    "type": "string",
+                    "description": "Sets a variable to the file given in the credentials (see Jenkins' Credentials Binding Plugin)"
+                }
+            },
+            "required": ["type", "id"],
             "additionalProperties": false
         },
         "credentials_certificate": {
@@ -149,35 +158,77 @@
                 "tox": { "$ref": "#/definitions/tox" },
                 "maven": { "$ref": "#/definitions/maven" }
             },
-            "oneOf": [
+            "anyOf": [
                 { "required": ["commands"] },
                 { "required": ["tox"] },
                 { "required": ["maven"] }
             ],
             "additionalProperties": false,
             "dependencies": {
-                "commands": ["container"]
+                "commands": ["container"],
+                "tox": ["container"]
             }
         },
-        "sqa_criterion_repo": {
+        "sqa_criterion_reponame": {
             "type": "object",
             "minProperties": 1,
             "patternProperties": {
                 "[a-z0-9_-]*": { "$ref": "#/definitions/repo_settings" }
             }
         },
-        "sqa_criterion": {
+        "sqa_criterion_with_repos": {
             "type": "object",
             "properties": {
-                "repos": { "$ref": "#/definitions/sqa_criterion_repo" }
+                "repos": { "$ref": "#/definitions/sqa_criterion_reponame" }
             },
             "required": ["repos"],
             "additionalProperties": false
         },
+        "sqa_criterion_repos_implies_config_repos": {
+            "anyOf": [
+                {
+                    "not": {
+                        "type": "object",
+                        "properties": {
+                            "sqa_criteria": {
+                                "type": "object",
+                                "minProperties": 1,
+                                "properties": {
+                                    "QC.Acc": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Lic": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Sty": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Uni": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Fun": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Sec": { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                                    "QC.Doc": { "$ref": "#/definitions/sqa_criterion_with_repos" }
+                                },
+                                "additionalProperties": false
+                            }
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "config": {
+                            "type": "object",
+                            "required": ["project_repos"]
+                        }
+                    },
+                    "required": ["config"]
+                }
+            ]
+        },
+        "sqa_criterion": {
+            "type": "object",
+            "oneOf": [
+                { "$ref": "#/definitions/sqa_criterion_with_repos" },
+                { "$ref": "#/definitions/repo_settings" }
+            ]
+        },
         "environment": {
             "description": "Sets the environment variables required for the runtime context",
             "type": "object",
-            "minProperties": 1,
             "propertyNames": {
                 "pattern": "^[A-Z]{1}[A-Z0-9_]*"
             }
@@ -200,6 +251,7 @@
                     "items": {
                         "anyOf": [
                             { "$ref": "#/definitions/credentials_string" },
+                            { "$ref": "#/definitions/credentials_file" },
                             { "$ref": "#/definitions/credentials_certificate" },
                             { "$ref": "#/definitions/credentials_username_password" },
                             { "$ref": "#/definitions/credentials_ssh_user_private_key" }
@@ -207,19 +259,20 @@
                     }
                 }
             },
-            "additionalProperties": false,
-            "required": ["project_repos"]
+            "additionalProperties": false
         },
         "sqa_criteria": {
             "description": "Contains all the required SQA baseline's criteria definitions",
             "type": "object",
             "minProperties": 1,
             "properties": {
-                "qc_style": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_coverage": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_functional": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_security": { "$ref": "#/definitions/sqa_criterion" },
-                "qc_doc": { "$ref": "#/definitions/sqa_criterion" }
+                "QC.Acc": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Lic": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Sty": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Uni": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Fun": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Sec": { "$ref": "#/definitions/sqa_criterion" },
+                "QC.Doc": { "$ref": "#/definitions/sqa_criterion" }
             },
             "additionalProperties": false
         },
@@ -231,8 +284,10 @@
         }
     },
     "required": [
-        "config",
         "sqa_criteria"
     ],
-    "additionalProperties": false
+    "additionalProperties": false,
+    "allOf": [
+        { "$ref": "#/definitions/sqa_criterion_repos_implies_config_repos" }
+    ]
 }
