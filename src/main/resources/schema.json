@@ -25,6 +25,15 @@
             "required": ["testenv", "tox_file"],
             "additionalProperties": false
         },
+        "maven": {
+            "type": "object",
+            "properties": {
+                "maven_file": { "type": "string" },
+                "options": { "type": "string" },
+                "goals": { "type": "string" }
+            },
+            "additionalProperties": false
+        },
         "credentials_string": {
             "type": "object",
             "properties": {
@@ -49,7 +58,7 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "const": "file",
+                    "enum": ["file", "zip"],
                     "description": "Copies the file given in the credentials to a temporary location, then sets the variable to that location. (The file is deleted when the build completes.)"
                 },
                 "id": {
@@ -149,11 +158,13 @@
             "properties": {
                 "container": { "type": "string" },
                 "commands": { "type": "array" },
-                "tox": { "$ref": "#/definitions/tox" }
+                "tox": { "$ref": "#/definitions/tox" },
+                "maven": { "$ref": "#/definitions/maven" }
             },
             "anyOf": [
                 { "required": ["commands"] },
-                { "required": ["tox"] }
+                { "required": ["tox"] },
+                { "required": ["maven"] }
             ],
             "additionalProperties": false,
             "dependencies": {
