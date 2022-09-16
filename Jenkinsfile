@@ -1,4 +1,4 @@
-@Library(['github.com/indigo-dc/jenkins-pipeline-library@release/2.1.0']) _
+@Library(['github.com/indigo-dc/jenkins-pipeline-library@release/2.3.0']) _
 
 def projectConfig
 
@@ -11,6 +11,7 @@ pipeline {
                 script {
                     projectConfig = pipelineConfig(
                         configFile: './.sqa/config_qc_style.yml'
+			validatorDockerImage: 'eoscsynergy/jpl-validator:2.4.0'
                     )
                     buildStages(projectConfig)
                 }
