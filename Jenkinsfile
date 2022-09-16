@@ -10,7 +10,7 @@ pipeline {
             steps {
                 script {
                     projectConfig = pipelineConfig(
-                        configFile: './.sqa/config_qc_style.yml'
+                        configFile: './.sqa/config_qc_style.yml',
 			validatorDockerImage: 'eoscsynergy/jpl-validator:2.4.0'
                     )
                     buildStages(projectConfig)
